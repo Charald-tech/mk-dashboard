@@ -1,0 +1,712 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Покраска МК — Финансовая модель</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Unbounded:wght@600;700&family=Mulish:wght@400;500;600;700&family=Fira+Code:wght@400;500;600&display=swap');
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+:root{
+  --bg:#edf0f5;--card:#ffffff;--card2:#f5f7fa;
+  --border:#d0d7e3;--border2:#b8c2d4;
+  --text:#111827;--t2:#374151;--t3:#6b7280;
+  --blue:#1d4ed8;--blue-lt:#dbeafe;
+  --teal:#059669;--teal-lt:#d1fae5;
+  --orange:#d97706;--orange-lt:#fef3c7;
+  --red:#dc2626;--red-lt:#fee2e2;
+  --violet:#7c3aed;--violet-lt:#ede9fe;
+  --head:'Unbounded',sans-serif;
+  --body:'Mulish',sans-serif;
+  --mono:'Fira Code',monospace;
+}
+body{background:var(--bg);color:var(--text);font-family:var(--body);font-size:13px;min-height:100vh;}
+
+/* HEADER */
+.hdr{background:#111827;padding:14px 22px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;}
+.hl{display:flex;align-items:center;gap:12px;}
+.logo{width:36px;height:36px;background:linear-gradient(135deg,#3b82f6,#06b6d4);border-radius:8px;display:flex;align-items:center;justify-content:center;font-family:var(--head);font-size:.68rem;font-weight:700;color:#fff;flex-shrink:0;}
+.htitle{font-family:var(--head);font-size:.9rem;font-weight:700;color:#fff;line-height:1.2;}
+.hsub{font-family:var(--mono);font-size:.56rem;color:rgba(255,255,255,.45);letter-spacing:.08em;text-transform:uppercase;margin-top:2px;}
+.hr{display:flex;gap:7px;flex-wrap:wrap;align-items:center;}
+.tag{font-family:var(--mono);font-size:.56rem;padding:3px 9px;border-radius:4px;border:1px solid rgba(255,255,255,.2);color:rgba(255,255,255,.65);letter-spacing:.05em;}
+.breset{font-family:var(--mono);font-size:.58rem;padding:5px 12px;border:1px solid rgba(255,255,255,.25);border-radius:5px;background:transparent;color:rgba(255,255,255,.75);cursor:pointer;transition:all .15s;}
+.breset:hover{background:rgba(255,255,255,.1);color:#fff;}
+
+/* TABS */
+.tabs{background:#fff;border-bottom:2px solid var(--border);padding:0 22px;display:flex;overflow-x:auto;}
+.tab{font-family:var(--mono);font-size:.6rem;letter-spacing:.1em;text-transform:uppercase;padding:12px 16px;cursor:pointer;color:var(--t3);border-bottom:3px solid transparent;margin-bottom:-2px;transition:all .15s;white-space:nowrap;user-select:none;}
+.tab:hover{color:var(--t2);}
+.tab.on{color:var(--blue);border-bottom-color:var(--blue);font-weight:600;}
+.tc{display:none;padding:18px 22px;}.tc.on{display:block;}
+
+/* LAYOUT */
+.lay{display:grid;grid-template-columns:290px 1fr;gap:14px;}
+@media(max-width:960px){.lay{grid-template-columns:1fr;}}
+.cl,.cr{display:flex;flex-direction:column;gap:11px;}
+
+/* CARD */
+.card{background:var(--card);border:1px solid var(--border);border-radius:9px;padding:15px;box-shadow:0 1px 4px rgba(0,0,0,.06);}
+.ctitle{font-family:var(--mono);font-size:.57rem;letter-spacing:.12em;text-transform:uppercase;color:var(--t3);margin-bottom:12px;padding-bottom:8px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:7px;font-weight:600;}
+.dot{width:7px;height:7px;border-radius:50%;flex-shrink:0;}
+.db{background:var(--blue);}.dt{background:var(--teal);}.do{background:var(--orange);}.dv{background:var(--violet);}.dr{background:var(--red);}
+
+/* SLIDERS */
+.slg{margin-bottom:11px;}
+.slh{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:5px;}
+.sln{font-size:.71rem;color:var(--t2);font-weight:600;}
+.slv{font-family:var(--mono);font-size:.82rem;font-weight:700;color:var(--blue);}
+.slv.t{color:var(--teal);}.slv.o{color:var(--orange);}.slv.v{color:var(--violet);}
+.slr{display:flex;gap:7px;align-items:center;}
+input[type=range]{flex:1;-webkit-appearance:none;appearance:none;height:4px;background:var(--border2);border-radius:2px;outline:none;cursor:pointer;}
+input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:15px;height:15px;border-radius:50%;background:var(--blue);border:3px solid #fff;box-shadow:0 0 0 1.5px var(--blue);cursor:pointer;}
+input[type=range].t::-webkit-slider-thumb{background:var(--teal);box-shadow:0 0 0 1.5px var(--teal);}
+input[type=range].o::-webkit-slider-thumb{background:var(--orange);box-shadow:0 0 0 1.5px var(--orange);}
+input[type=range].v::-webkit-slider-thumb{background:var(--violet);box-shadow:0 0 0 1.5px var(--violet);}
+.rbn{font-family:var(--mono);font-size:.52rem;color:var(--t3);background:var(--card2);border:1px solid var(--border2);border-radius:4px;padding:2px 7px;cursor:pointer;white-space:nowrap;transition:all .12s;}
+.rbn:hover{color:var(--blue);border-color:var(--blue);}
+.snote{font-size:.62rem;color:var(--t3);margin-top:2px;}
+.snote.w{color:var(--red);}
+hr.d{border:none;border-top:1px solid var(--border);margin:9px 0;}
+.slbl{font-family:var(--mono);font-size:.55rem;letter-spacing:.1em;text-transform:uppercase;color:var(--t3);margin:9px 0 6px;padding-bottom:4px;border-bottom:1px dashed var(--border2);font-weight:600;}
+
+/* TOGGLE */
+.tow{display:flex;gap:5px;margin:7px 0;}
+.tobt{flex:1;font-family:var(--mono);font-size:.59rem;padding:7px;border:1.5px solid var(--border2);border-radius:6px;background:transparent;color:var(--t3);cursor:pointer;transition:all .15s;text-align:center;font-weight:600;}
+.tobt:hover{color:var(--t2);}
+.tobt.on{background:var(--blue-lt);border-color:var(--blue);color:var(--blue);}
+.tobt.ono{background:var(--orange-lt);border-color:var(--orange);color:var(--orange);}
+
+/* PERSON ROW */
+.pr{display:flex;align-items:center;gap:7px;margin-bottom:5px;padding:5px 8px;background:var(--card2);border-radius:6px;border:1px solid var(--border);}
+.prn{flex:1;font-size:.67rem;color:var(--t2);font-weight:500;}
+.prc{display:flex;align-items:center;gap:4px;}
+.pb{width:20px;height:20px;border-radius:4px;border:1px solid var(--border2);background:#fff;color:var(--t2);cursor:pointer;font-size:.8rem;display:flex;align-items:center;justify-content:center;transition:all .12s;font-weight:700;}
+.pb:hover{border-color:var(--blue);color:var(--blue);}
+.pnum{font-family:var(--mono);font-size:.75rem;font-weight:700;color:var(--text);width:22px;text-align:center;}
+.psal{font-family:var(--mono);font-size:.61rem;color:var(--t3);width:72px;text-align:right;}
+
+/* CAPEX */
+.capbox{background:linear-gradient(135deg,#fffbeb,#fef3c7);border:1.5px solid #fbbf24;border-radius:8px;padding:11px;margin-bottom:6px;}
+.captag{font-family:var(--mono);font-size:.54rem;color:var(--orange);letter-spacing:.1em;text-transform:uppercase;margin-bottom:4px;font-weight:700;}
+.capval{font-family:var(--head);font-size:1.4rem;font-weight:700;color:var(--orange);}
+.capnote{font-size:.62rem;color:#92400e;margin-top:3px;}
+
+/* IR row */
+.ir{display:flex;justify-content:space-between;align-items:baseline;padding:5px 0;border-bottom:1px solid var(--border);}
+.ir:last-child{border-bottom:none;}
+.irn{font-size:.7rem;color:var(--t2);font-weight:600;}
+.irv{font-family:var(--mono);font-size:.73rem;font-weight:700;color:var(--text);}
+.irv.b{color:var(--blue);}.irv.t{color:var(--teal);}.irv.o{color:var(--orange);}
+
+/* SPLIT 3 */
+.s3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-bottom:10px;}
+.sc{border-radius:8px;padding:10px 12px;border:1.5px solid;}
+.sc.fx{background:var(--blue-lt);border-color:#93c5fd;}
+.sc.vr{background:var(--orange-lt);border-color:#fcd34d;}
+.sc.cx{background:var(--violet-lt);border-color:#c4b5fd;}
+.scl{font-size:.59rem;color:var(--t2);text-transform:uppercase;letter-spacing:.05em;margin-bottom:2px;font-weight:700;}
+.scv{font-family:var(--head);font-size:.9rem;font-weight:700;}
+.scv.b{color:var(--blue);}.scv.o{color:var(--orange);}.scv.v{color:var(--violet);}
+.scs{font-family:var(--mono);font-size:.57rem;color:var(--t3);margin-top:2px;}
+
+/* KPI */
+.kg4{display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:8px;}
+.kg2{display:grid;grid-template-columns:1fr 1fr;gap:11px;}
+@media(max-width:720px){.kg4{grid-template-columns:1fr 1fr;}}
+.kpi{background:var(--card);border:1px solid var(--border);border-radius:8px;padding:11px 13px;box-shadow:0 1px 3px rgba(0,0,0,.04);}
+.kpi.b{border-left:4px solid var(--blue);}
+.kpi.t{border-left:4px solid var(--teal);}
+.kpi.o{border-left:4px solid var(--orange);}
+.kpi.r{border-left:4px solid var(--red);}
+.kpi.v{border-left:4px solid var(--violet);}
+.kl{font-size:.61rem;color:var(--t3);text-transform:uppercase;letter-spacing:.05em;margin-bottom:3px;font-weight:700;}
+.kv{font-family:var(--head);font-size:.95rem;font-weight:700;color:var(--text);line-height:1.1;}
+.kv.b{color:var(--blue);}.kv.t{color:var(--teal);}.kv.o{color:var(--orange);}.kv.r{color:var(--red);}.kv.v{color:var(--violet);}
+.ks{font-family:var(--mono);font-size:.57rem;color:var(--t3);margin-top:3px;font-weight:500;}
+
+/* COST BARS */
+.cbar{display:flex;align-items:center;gap:8px;margin-bottom:6px;}
+.cbl{width:165px;flex-shrink:0;font-size:.66rem;color:var(--t2);font-weight:500;}
+.cbo{flex:1;height:8px;background:var(--border);border-radius:4px;overflow:hidden;}
+.cbi{height:100%;border-radius:4px;transition:width .5s ease;}
+.cbv{width:88px;text-align:right;font-family:var(--mono);font-size:.63rem;color:var(--t2);font-weight:600;flex-shrink:0;}
+
+/* CHART */
+.chw{position:relative;height:180px;}
+canvas{width:100%!important;height:100%!important;}
+
+/* TABLE */
+.scw{overflow-x:auto;}
+table{width:100%;border-collapse:collapse;font-size:.7rem;}
+thead{background:#1f2937;}
+thead th{color:#f9fafb;padding:9px 10px;text-align:right;font-family:var(--mono);font-size:.57rem;letter-spacing:.07em;text-transform:uppercase;font-weight:500;}
+thead th:first-child{text-align:left;}
+tbody tr{border-bottom:1px solid var(--border);}
+tbody tr:hover{background:var(--card2);}
+tbody tr.hl{background:#eff6ff;}
+tbody tr.hl td:first-child{color:var(--blue);font-weight:700;}
+td{padding:7px 10px;text-align:right;font-family:var(--mono);font-size:.67rem;color:var(--text);font-weight:500;}
+td:first-child{text-align:left;font-family:var(--body);color:var(--t2);}
+.pos{color:var(--teal);font-weight:700;}.neg{color:var(--red);font-weight:700;}.neu{color:var(--t3);}
+
+/* PERIOD */
+.pg{display:flex;gap:5px;flex-wrap:wrap;margin-bottom:12px;}
+.pbt{font-family:var(--mono);font-size:.59rem;padding:5px 11px;border:1.5px solid var(--border2);border-radius:5px;background:var(--card);color:var(--t3);cursor:pointer;transition:all .15s;font-weight:600;}
+.pbt.on{background:var(--blue-lt);border-color:var(--blue);color:var(--blue);}
+
+/* INFO */
+.ibox{background:var(--blue-lt);border-left:3px solid var(--blue);padding:9px 12px;font-size:.67rem;line-height:1.6;color:var(--t2);border-radius:0 6px 6px 0;margin-top:7px;font-weight:500;}
+.ibox b{color:var(--text);}
+.ibox.o{background:var(--orange-lt);border-left-color:var(--orange);}
+</style>
+</head>
+<body>
+
+<div class="hdr">
+  <div class="hl">
+    <div class="logo">МК</div>
+    <div>
+      <div class="htitle">Покраска МК — Финансовая модель</div>
+      <div class="hsub">СИТЭК / АКЗ Покрытия · База 150 т/мес · v5</div>
+    </div>
+  </div>
+  <div class="hr">
+    <div class="tag">150 т/мес</div>
+    <div class="tag">Цех 1300 м²</div>
+    <div class="tag">CAPEX 2,2 М</div>
+    <button class="breset" id="btn_reset">↺ Сброс к базе</button>
+  </div>
+</div>
+
+<div class="tabs">
+  <div class="tab on" data-tab="model">Модель</div>
+  <div class="tab" data-tab="period">По периодам</div>
+  <div class="tab" data-tab="scenarios">Сценарии</div>
+  <div class="tab" data-tab="source">Исходные данные</div>
+</div>
+
+<!-- MODEL -->
+<div class="tc on" id="tab-model">
+<div class="lay">
+<div class="cl">
+
+  <div class="card">
+    <div class="ctitle"><span class="dot do"></span>CAPEX — стартовые затраты (разово)</div>
+    <div class="capbox">
+      <div class="captag">⚡ Единовременно при запуске — не входят в ежемес. затраты</div>
+      <div class="capval" id="cap_v">—</div>
+      <div class="capnote">Окупаются из чистой прибыли</div>
+    </div>
+    <div class="slg"><div class="slh"><span class="sln">Дооснащение цеха</span><span class="slv o" id="lc1">1 500 000</span></div><div class="slr"><input type="range" class="o" id="sc1" min="0" max="5000000" step="100000" value="1500000"><button class="rbn" data-reset="sc1" data-val="1500000" data-lbl="lc1">база</button></div></div>
+    <div class="slg"><div class="slh"><span class="sln">Оборудование и СИЗЫ</span><span class="slv o" id="lc2">700 000</span></div><div class="slr"><input type="range" class="o" id="sc2" min="0" max="2000000" step="50000" value="700000"><button class="rbn" data-reset="sc2" data-val="700000" data-lbl="lc2">база</button></div></div>
+  </div>
+
+  <div class="card">
+    <div class="ctitle"><span class="dot db"></span>Объём и цена</div>
+    <div class="slg"><div class="slh"><span class="sln">Объём производства, т/мес</span><span class="slv" id="lv">150</span></div><div class="slr"><input type="range" id="sv" min="50" max="1000" step="25" value="150"><button class="rbn" data-reset="sv" data-val="150" data-lbl="lv">база</button></div></div>
+    <div class="slg"><div class="slh"><span class="sln">Цена реализации, руб./т</span><span class="slv t" id="lp">155 000</span></div><div class="slr"><input type="range" class="t" id="sp" min="40000" max="350000" step="5000" value="155000"><button class="rbn" data-reset="sp" data-val="155000" data-lbl="lp">база</button></div></div>
+    <div class="slg"><div class="slh"><span class="sln">Коэф. м²/тонна</span><span class="slv" id="lm2t">45</span></div><div class="slr"><input type="range" id="sm2t" min="20" max="80" step="1" value="45"><button class="rbn" data-reset="sm2t" data-val="45" data-lbl="lm2t">база</button></div><div class="snote">2–3 гр. ≈ 45 · балки 25–30 · сложные фермы 60–80</div></div>
+    <div class="ibox o" style="font-size:.64rem;">
+      <b>Рынок 2025:</b> цеховая окраска с матер. — 120–165 тыс. руб./т<br>
+      Новошахтинск (с изгот.): <b>350 000 руб./т</b> · Тэмпо (только работа): <b>75 000 руб./т</b>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="ctitle"><span class="dot db"></span>Постоянные затраты / мес</div>
+    <div class="slbl">Аренда</div>
+    <div class="slg"><div class="slh"><span class="sln">Площадь цеха, м²</span><span class="slv" id="larea">1 300</span></div><div class="slr"><input type="range" id="sarea" min="300" max="5000" step="100" value="1300"><button class="rbn" data-reset="sarea" data-val="1300" data-lbl="larea">база</button></div></div>
+    <div class="slg"><div class="slh"><span class="sln">Ставка аренды, руб./м²/мес</span><span class="slv" id="lrentr">850</span></div><div class="slr"><input type="range" id="srentr" min="300" max="2500" step="50" value="850"><button class="rbn" data-reset="srentr" data-val="850" data-lbl="lrentr">база</button></div></div>
+    <div class="ir"><span class="irn">Аренда итого</span><span class="irv b" id="rent_v">—</span></div>
+    <hr class="d">
+    <div class="slbl">Содержание цеха (эл-во + ТО)</div>
+    <div class="slg"><div class="slh"><span class="sln">Электроэнергия</span><span class="slv" id="lelec">543 400</span></div><div class="slr"><input type="range" id="selec" min="100000" max="2000000" step="50000" value="543400"><button class="rbn" data-reset="selec" data-val="543400" data-lbl="lelec">база</button></div><div class="snote">Масштабируется по площади цеха</div></div>
+    <div class="slg"><div class="slh"><span class="sln">ТО оборудования и прочее</span><span class="slv" id="lto">440 000</span></div><div class="slr"><input type="range" id="sto" min="50000" max="1500000" step="50000" value="440000"><button class="rbn" data-reset="sto" data-val="440000" data-lbl="lto">база</button></div></div>
+    <hr class="d">
+    <div class="slbl">Транспорт и вахта</div>
+    <div class="slg"><div class="slh"><span class="sln">Вахта + проживание + суточные</span><span class="slv" id="ltrans">347 000</span></div><div class="slr"><input type="range" id="strans" min="0" max="1000000" step="50000" value="347000"><button class="rbn" data-reset="strans" data-val="347000" data-lbl="ltrans">база</button></div></div>
+    <hr class="d">
+    <div class="ir"><span class="irn">Постоянные итого (с арендой)</span><span class="irv b" id="fixed_v">—</span></div>
+  </div>
+
+  <div class="card">
+    <div class="ctitle"><span class="dot db"></span>ФОТ ИТР — фиксированные сотрудники</div>
+    <div id="itr_list"></div>
+    <div class="ir" style="margin-top:5px;"><span class="irn">ФОТ ИТР итого (×1,74 с налогами)</span><span class="irv b" id="itr_v">—</span></div>
+  </div>
+
+  <div class="card">
+    <div class="ctitle"><span class="dot dr"></span>Стропальщики — фиксированная бригада</div>
+    <div class="ibox o" style="font-size:.63rem;margin-bottom:9px;"><b>Фиксированные</b> — не зависят от объёма. При малых объёмах — главный драйвер себестоимости.</div>
+    <div class="slg"><div class="slh"><span class="sln">Кол-во стропальщиков</span><span class="slv o" id="lstrop_cnt">3</span></div><div class="slr"><input type="range" class="o" id="sstrop_cnt" min="1" max="20" step="1" value="3"><button class="rbn" data-reset="sstrop_cnt" data-val="3" data-lbl="lstrop_cnt">база</button></div></div>
+    <div class="slg"><div class="slh"><span class="sln">Ставка в день на руки, руб.</span><span class="slv o" id="lstrop_r">8 000</span></div><div class="slr"><input type="range" class="o" id="sstrop_r" min="3000" max="20000" step="500" value="8000"><button class="rbn" data-reset="sstrop_r" data-val="8000" data-lbl="lstrop_r">база</button></div></div>
+    <div class="ir"><span class="irn">Стропальщики итого/мес</span><span class="irv o" id="strop_v">—</span></div>
+  </div>
+
+  <div class="card">
+    <div class="ctitle"><span class="dot dv"></span>Переменные затраты на 1 тонну</div>
+    <div class="slg"><div class="slh"><span class="sln">Материалы АКРУС + расходники, руб./т</span><span class="slv v" id="lmat">59 265</span></div><div class="slr"><input type="range" class="v" id="smat" min="20000" max="120000" step="500" value="59265"><button class="rbn" data-reset="smat" data-val="59265" data-lbl="lmat">база</button></div></div>
+    <div class="slbl">ФОТ сдельный</div>
+    <div class="tow">
+      <button class="tobt on" id="tog_ru">🇷🇺 РФ (~260 т.р./мес)</button>
+      <button class="tobt" id="tog_int">🌏 Иностранцы (~100 т.р./мес)</button>
+    </div>
+    <div class="slg"><div class="slh"><span class="sln">Пескоструйщики, чел.</span><span class="slv" id="lps">0</span></div><div class="slr"><input type="range" id="sps" min="0" max="18" step="1" value="0"><button class="rbn" data-reset="sps" data-val="0" data-lbl="lps">база</button></div></div>
+    <div class="slg"><div class="slh"><span class="sln">Маляры, чел.</span><span class="slv" id="lml">2</span></div><div class="slr"><input type="range" id="sml" min="1" max="15" step="1" value="2"><button class="rbn" data-reset="sml" data-val="2" data-lbl="lml">база</button></div></div>
+    <div class="ir"><span class="irn">Переменные итого, руб./т</span><span class="irv v" id="var_pt_v">—</span></div>
+  </div>
+
+</div><!-- /cl -->
+
+<div class="cr">
+
+  <!-- SPLIT -->
+  <div class="card">
+    <div class="ctitle"><span class="dot db"></span>Структура затрат — постоянные / переменные / CAPEX</div>
+    <div class="s3">
+      <div class="sc fx"><div class="scl">📌 Постоянные/мес</div><div class="scv b" id="sk_fix">—</div><div class="scs" id="sk_fix_pt">—</div></div>
+      <div class="sc vr"><div class="scl">📈 Переменные/мес</div><div class="scv o" id="sk_var">—</div><div class="scs" id="sk_var_pt">—</div></div>
+      <div class="sc cx"><div class="scl">⚡ CAPEX разово</div><div class="scv v" id="sk_capex">—</div><div class="scs">стартовые вложения</div></div>
+    </div>
+  </div>
+
+  <!-- KPI: выручка / затраты / чистая / маржа -->
+  <div class="kg4">
+    <div class="kpi t"><div class="kl">Выручка / мес</div><div class="kv t" id="k_rev">—</div><div class="ks" id="k_rev_s">—</div></div>
+    <div class="kpi b"><div class="kl">Затраты полные / мес</div><div class="kv b" id="k_cost">—</div><div class="ks" id="k_cost_s">—</div></div>
+    <div class="kpi t"><div class="kl">Чистая прибыль / мес</div><div class="kv" id="k_net">—</div><div class="ks" id="k_net_s">—</div></div>
+    <div class="kpi t"><div class="kl">Маржа до налогов</div><div class="kv" id="k_marg">—</div><div class="ks">от выручки</div></div>
+  </div>
+
+  <!-- KPI: удельные -->
+  <div class="kg4">
+    <div class="kpi b"><div class="kl">Себестоим. 1 м²</div><div class="kv b" id="k_cpm2">—</div><div class="ks" id="k_cpm2_s">—</div></div>
+    <div class="kpi t"><div class="kl">Цена реализ. 1 м²</div><div class="kv t" id="k_pm2">—</div><div class="ks">расчётная</div></div>
+    <div class="kpi o"><div class="kl">ТБУ — точка безубыточности</div><div class="kv" id="k_bep_v">—</div><div class="ks">минимальный объём т/мес</div></div>
+    <div class="kpi v"><div class="kl">Доля материалов</div><div class="kv v" id="k_mat_sh">—</div><div class="ks">в затратах</div></div>
+  </div>
+
+  <!-- KPI: доля ФОТ -->
+  <div class="kg4">
+    <div class="kpi b"><div class="kl">Доля ФОТ в затратах</div><div class="kv b" id="k_fot">—</div><div class="ks">все ФОТ вместе</div></div>
+    <div class="kpi o"><div class="kl">Окупаемость CAPEX</div><div class="kv o" id="k_pb">—</div><div class="ks">мес. чистой прибылью</div></div>
+    <div class="kpi b"><div class="kl">Себестоим. 1 т</div><div class="kv b" id="k_cpt">—</div><div class="ks">полная</div></div>
+    <div class="kpi t"><div class="kl">Мин. цена реализ. (ТБУ)</div><div class="kv" id="k_bep_p">—</div><div class="ks">руб./т при выбр. объёме</div></div>
+  </div>
+
+  <!-- CHART -->
+  <div class="card">
+    <div class="ctitle"><span class="dot dt"></span>Чистая прибыль по объёмам производства</div>
+    <div class="chw"><canvas id="cProfit"></canvas></div>
+  </div>
+
+  <!-- BREAKDOWN -->
+  <div class="card">
+    <div class="ctitle"><span class="dot dv"></span>Структура затрат — статьи при текущем объёме</div>
+    <div id="breakdown"></div>
+  </div>
+
+</div><!-- /cr -->
+</div><!-- /lay -->
+</div>
+
+<!-- PERIOD -->
+<div class="tc" id="tab-period">
+  <div class="card" style="margin-bottom:12px;">
+    <div class="ctitle"><span class="dot db"></span>Горизонт планирования</div>
+    <div class="pg" id="pgrid"></div>
+    <div class="kg4" id="p_kpi" style="margin-bottom:14px;"></div>
+    <div class="scw" id="p_table"></div>
+  </div>
+  <div class="ibox" style="font-size:.65rem;">В <b>месяц 1</b> из чистой прибыли вычитается CAPEX. Далее — нарастающий итог.</div>
+</div>
+
+<!-- SCENARIOS -->
+<div class="tc" id="tab-scenarios">
+  <div class="card" style="margin-bottom:12px;">
+    <div class="ctitle"><span class="dot dt"></span>Матрица чистой прибыли / мес — объём × цена</div>
+    <div class="scw" id="scen_m"></div>
+  </div>
+  <div class="card">
+    <div class="ctitle"><span class="dot do"></span>ТБУ — точка безубыточности и минимальные цены</div>
+    <div class="scw" id="bep_t"></div>
+  </div>
+</div>
+
+<!-- SOURCE -->
+<div class="tc" id="tab-source">
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;">
+    <div>
+      <div class="card" style="margin-bottom:12px;">
+        <div class="ctitle"><span class="dot db"></span>Постоянные затраты (детализация)</div>
+        <table><tbody>
+          <tr><td>Аренда (1 300 м² × 850 р/м²)</td><td class="pos">1 105 000 руб.</td></tr>
+          <tr><td>Электроэнергия (эл/вент/краны)</td><td>543 400 руб.</td></tr>
+          <tr><td>ТО оборудования и прочее</td><td>440 000 руб.</td></tr>
+          <tr><td>ФОТ ИТР (5 чел. с налогами)</td><td>907 192 руб.</td></tr>
+          <tr><td>Стропальщики (3 × 8000 р/д × 26д × 1,74)</td><td>1 088 630 руб.</td></tr>
+          <tr><td>Транспорт / вахта / проживание / суточные</td><td>347 000 руб.</td></tr>
+          <tr style="border-top:2px solid var(--border2);background:var(--card2);"><td><b>ИТОГО постоянные</b></td><td class="pos"><b>4 431 222 руб.</b></td></tr>
+        </tbody></table>
+        <div class="ibox" style="margin-top:8px;font-size:.64rem;">Содержание цеха = Эл-во + ТО — прямая сумма, без вычитания.</div>
+      </div>
+      <div class="card">
+        <div class="ctitle"><span class="dot do"></span>CAPEX — стартовые затраты</div>
+        <table><tbody>
+          <tr><td>Дооснащение цеха (опоры, вент., эл.)</td><td class="neg">1 500 000 руб.</td></tr>
+          <tr><td>Покрасочное оборудование</td><td>300 000 руб.</td></tr>
+          <tr><td>Маркиратор</td><td>100 000 руб.</td></tr>
+          <tr><td>Инструмент, СИЗЫ стартовый</td><td>200 000 руб.</td></tr>
+          <tr><td>Прочие расходы</td><td>100 000 руб.</td></tr>
+          <tr style="border-top:2px solid var(--border2);background:var(--card2);"><td><b>ИТОГО CAPEX</b></td><td class="neg"><b>2 200 000 руб.</b></td></tr>
+        </tbody></table>
+      </div>
+    </div>
+    <div>
+      <div class="card" style="margin-bottom:12px;">
+        <div class="ctitle"><span class="dot dv"></span>Переменные затраты на 1 тонну</div>
+        <table><tbody>
+          <tr><td>Акрус Эпокс С (36,97 кг × 873,6 р)</td><td>32 294 руб.</td></tr>
+          <tr><td>Акрус Полиур 7047 (15,17 кг × 892,5 р)</td><td>13 539 руб.</td></tr>
+          <tr><td>Растворитель + прочие мат.</td><td>2 449 руб.</td></tr>
+          <tr><td>Пиломатериалы, крепёж</td><td>10 000 руб.</td></tr>
+          <tr><td>Упаковка, маркировка, расходники</td><td>2 330 руб.</td></tr>
+          <tr style="border-top:2px solid var(--border2);background:var(--card2);"><td><b>Материалы итого (с НДС)</b></td><td class="pos"><b>59 265 руб./т</b></td></tr>
+          <tr><td>ФОТ сдельный (2 маляра × 4000 р/т × 1,74)</td><td>13 957 руб./т</td></tr>
+          <tr style="background:var(--card2);"><td><b>Переменные итого</b></td><td class="pos"><b>73 222 руб./т</b></td></tr>
+        </tbody></table>
+      </div>
+      <div class="card">
+        <div class="ctitle"><span class="dot dt"></span>Проверочные значения при 150 т/мес</div>
+        <table><tbody>
+          <tr><td>Постоянные затраты/мес</td><td class="pos">4 431 222 руб.</td></tr>
+          <tr><td>Переменные затраты/мес</td><td>10 983 270 руб.</td></tr>
+          <tr style="border-top:2px solid var(--border2);"><td><b>Итого затраты</b></td><td><b>15 414 492 руб.</b></td></tr>
+          <tr><td>Выручка (155 000 × 150)</td><td class="pos">23 250 000 руб.</td></tr>
+          <tr><td>Прибыль до налогов</td><td>7 835 508 руб.</td></tr>
+          <tr><td>НДС к уплате</td><td class="neg">2 393 375 руб.</td></tr>
+          <tr><td>Налог на прибыль 25%</td><td class="neg">1 360 533 руб.</td></tr>
+          <tr style="border-top:2px solid var(--border2);background:var(--card2);"><td><b>Чистая прибыль</b></td><td class="pos"><b>4 081 600 руб.</b></td></tr>
+          <tr><td>Себестоим./т</td><td>102 763 руб.</td></tr>
+          <tr><td>Себестоим./м² (÷45)</td><td class="pos">2 284 руб. ✓</td></tr>
+          <tr><td>Цена реализ./м² (÷45)</td><td>3 444 руб. ✓</td></tr>
+        </tbody></table>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+(function(){
+var DAYS=26,TAX=1.43*1.22,BASE_AREA=1300;
+var fotMode='ru';
+var ITR=[
+  {n:'Мастер производства',cnt:1,sal:150000},
+  {n:'ПТО (инженер)',       cnt:1,sal:150000},
+  {n:'Инженер ОТ и ТБ',   cnt:1,sal:60000},
+  {n:'Бухгалтер',          cnt:1,sal:70000},
+  {n:'Охранник',           cnt:2,sal:45000},
+  {n:'Водитель',           cnt:0,sal:55000},
+];
+
+// FORMAT
+function fm(n,d){d=d==null?0:d;if(!isFinite(n)||isNaN(n))return'—';return n.toLocaleString('ru-RU',{minimumFractionDigits:d,maximumFractionDigits:d});}
+function fM(n){var a=Math.abs(n);if(a>=1e6)return fm(n/1e6,2)+' М';if(a>=1000)return fm(n/1000,0)+' К';return fm(n);}
+function fP(n){return fm(n*100,1)+'%';}
+function el(id){return document.getElementById(id);}
+function setText(id,v){var e=el(id);if(e)e.textContent=v;}
+
+// TABS
+document.querySelectorAll('.tab').forEach(function(tab){
+  tab.addEventListener('click',function(){
+    var t=this.getAttribute('data-tab');
+    document.querySelectorAll('.tab').forEach(function(x){x.classList.remove('on');});
+    document.querySelectorAll('.tc').forEach(function(x){x.classList.remove('on');});
+    this.classList.add('on');
+    var tc=document.getElementById('tab-'+t);
+    if(tc)tc.classList.add('on');
+    if(t==='period')buildPeriod();
+    if(t==='scenarios')buildScenarios();
+  });
+});
+
+// SLIDERS
+document.querySelectorAll('input[type=range]').forEach(function(sl){
+  sl.addEventListener('input',function(){
+    updateSlLabel(this);
+    update();
+  });
+});
+document.querySelectorAll('.rbn[data-reset]').forEach(function(btn){
+  btn.addEventListener('click',function(){
+    var sid=this.getAttribute('data-reset');
+    var val=+this.getAttribute('data-val');
+    var lid=this.getAttribute('data-lbl');
+    var sl=el(sid);
+    if(sl){sl.value=val;updateSlLabelById(sid,lid);}
+    update();
+  });
+});
+el('btn_reset').addEventListener('click',resetAll);
+el('tog_ru').addEventListener('click',function(){setFot('ru');});
+el('tog_int').addEventListener('click',function(){setFot('int');});
+
+function updateSlLabel(sl){
+  var id=sl.id;
+  var lmap={sv:'lv',sp:'lp',sm2t:'lm2t',sarea:'larea',srentr:'lrentr',selec:'lelec',sto:'lto',strans:'ltrans',sstrop_cnt:'lstrop_cnt',sstrop_r:'lstrop_r',smat:'lmat',sps:'lps',sml:'lml',sc1:'lc1',sc2:'lc2'};
+  var lid=lmap[id];
+  if(lid){var e=el(lid);if(e)e.textContent=fm(+sl.value);}
+}
+function updateSlLabelById(sid,lid){
+  var sl=el(sid);var le=el(lid);
+  if(sl&&le)le.textContent=fm(+sl.value);
+}
+
+// ITR
+function buildItr(){
+  ITR.forEach(function(p){p._c=p.cnt;});
+  el('itr_list').innerHTML=ITR.map(function(p,i){
+    return'<div class="pr"><span class="prn">'+p.n+'</span>'+
+    '<div class="prc"><button class="pb" data-idx="'+i+'" data-d="-1">−</button>'+
+    '<span class="pnum" id="ic'+i+'">'+p.cnt+'</span>'+
+    '<button class="pb" data-idx="'+i+'" data-d="1">+</button></div>'+
+    '<span class="psal">'+fm(p.sal)+' р</span></div>';
+  }).join('');
+  el('itr_list').querySelectorAll('.pb').forEach(function(b){
+    b.addEventListener('click',function(){
+      var i=+this.getAttribute('data-idx');
+      var d=+this.getAttribute('data-d');
+      ITR[i]._c=Math.max(0,(ITR[i]._c||0)+d);
+      var e=el('ic'+i);if(e)e.textContent=ITR[i]._c;
+      update();
+    });
+  });
+}
+function getItr(){return ITR.reduce(function(s,p){return s+(p._c||0)*p.sal*TAX;},0);}
+
+function setFot(m){
+  fotMode=m;
+  el('tog_ru').className='tobt'+(m==='ru'?' on':'');
+  el('tog_int').className='tobt'+(m==='int'?' ono':'');
+  update();
+}
+
+function getV(){
+  var area=+el('sarea').value;
+  return{
+    vol:  +el('sv').value,
+    price:+el('sp').value,
+    m2t:  +el('sm2t').value,
+    area: area,
+    rent: area*(+el('srentr').value),
+    elec: +el('selec').value*(area/BASE_AREA),
+    to_:  +el('sto').value,
+    trans:+el('strans').value,
+    sc_c: +el('sstrop_cnt').value,
+    sc_r: +el('sstrop_r').value,
+    mat:  +el('smat').value,
+    ps:   +el('sps').value,
+    ml:   +el('sml').value,
+    capex:+el('sc1').value + +el('sc2').value,
+  };
+}
+
+function calc(vol,price,v){
+  var itr=getItr();
+  var strop=v.sc_c*v.sc_r*TAX*DAYS;
+  var fixed=v.rent+v.elec+v.to_+itr+strop+v.trans;
+  var rate=fotMode==='ru'?4000:1600;
+  var fotPT=(v.ps+v.ml)*rate*TAX;
+  var varPT=v.mat+fotPT;
+  var total=fixed+varPT*vol;
+  var rev=price*vol;
+  var profBef=rev-total;
+  var nds=Math.max(0,rev/6-v.mat*vol/6);
+  var profAfNds=profBef-nds;
+  var tax=Math.max(0,profAfNds*0.25);
+  var net=profAfNds-tax;
+  return{itr,strop,fixed,fotPT,varPT,totalVar:varPT*vol,total,rev,profBef,nds,tax,net,
+    margin:rev>0?profBef/rev:0,netMargin:rev>0?net/rev:0,cpt:vol>0?total/vol:0,
+    bepV:price-varPT>0?fixed/(price-varPT):Infinity};
+}
+
+// CHART
+var VOLS=[50,100,150,200,300,400,500,700,1000];
+function drawBar(cid,labels,vals){
+  var cv=el(cid);if(!cv)return;
+  var dpr=window.devicePixelRatio||1,W=cv.parentElement.clientWidth||380,H=180;
+  cv.width=W*dpr;cv.height=H*dpr;cv.style.width=W+'px';cv.style.height=H+'px';
+  var ctx=cv.getContext('2d');ctx.scale(dpr,dpr);
+  var P={t:8,r:8,b:26,l:52},cW=W-P.l-P.r,cH=H-P.t-P.b;
+  ctx.fillStyle='#fff';ctx.fillRect(0,0,W,H);
+  var mx=Math.max.apply(null,vals.map(Math.abs))||1;
+  var mn=Math.min(0,Math.min.apply(null,vals)),rng=mx-mn;
+  var yZ=P.t+(mx/rng)*cH;
+  [.25,.5,.75,1].forEach(function(f){
+    var y=P.t+f*cH;
+    ctx.strokeStyle='#e5e7eb';ctx.lineWidth=1;ctx.beginPath();ctx.moveTo(P.l,y);ctx.lineTo(P.l+cW,y);ctx.stroke();
+    ctx.fillStyle='#9ca3af';ctx.font='500 8px Fira Code,monospace';ctx.textAlign='right';
+    ctx.fillText(fM(mx-f*rng),P.l-4,y+3);
+  });
+  ctx.strokeStyle='#d1d5db';ctx.lineWidth=1;ctx.setLineDash([3,3]);
+  ctx.beginPath();ctx.moveTo(P.l,yZ);ctx.lineTo(P.l+cW,yZ);ctx.stroke();ctx.setLineDash([]);
+  var bW=cW/labels.length*.6,gap=cW/labels.length;
+  vals.forEach(function(v,i){
+    var x=P.l+i*gap+gap*.2,bH=Math.max(1,Math.abs(v)/rng*cH),y=v>=0?yZ-bH:yZ;
+    ctx.fillStyle=v>=0?'#059669':'#dc2626';
+    ctx.beginPath();
+    if(ctx.roundRect)ctx.roundRect(x,y,bW,bH,3);else ctx.rect(x,y,bW,bH);
+    ctx.fill();
+    ctx.fillStyle='#6b7280';ctx.font='500 7px Fira Code,monospace';ctx.textAlign='center';
+    ctx.fillText(labels[i],x+bW/2,H-P.b+11);
+  });
+}
+
+function buildBreakdown(v,m){
+  var items=[
+    {l:'Материалы АКРУС',  val:v.mat*v.vol, col:'#7c3aed'},
+    {l:'Стропальщики (fix)',val:m.strop,     col:'#dc2626'},
+    {l:'Эл-во + ТО цеха',  val:v.elec+v.to_,col:'#1d4ed8'},
+    {l:'Аренда',           val:v.rent,       col:'#0284c7'},
+    {l:'ФОТ ИТР',         val:m.itr,         col:'#059669'},
+    {l:'ФОТ сдельный',    val:m.fotPT*v.vol, col:'#0d9488'},
+    {l:'Транспорт/вахта', val:v.trans,       col:'#d97706'},
+  ];
+  var tot=items.reduce(function(s,i){return s+i.val;},0);
+  return items.map(function(i){
+    var pct=tot>0?i.val/tot*100:0;
+    return'<div class="cbar">'+
+      '<div class="cbl">'+i.l+'</div>'+
+      '<div class="cbo"><div class="cbi" style="width:'+pct.toFixed(1)+'%;background:'+i.col+'"></div></div>'+
+      '<div class="cbv">'+fM(i.val)+' ('+pct.toFixed(0)+'%)</div></div>';
+  }).join('');
+}
+
+function update(){
+  var v=getV(),m=calc(v.vol,v.price,v);
+  setText('cap_v',fM(v.capex)+' руб.');
+  setText('sk_capex',fM(v.capex)+' руб.');
+  setText('rent_v',fm(v.rent)+' руб.');
+  setText('fixed_v',fM(m.fixed)+' руб.');
+  setText('itr_v',fm(m.itr,0)+' руб.');
+  setText('strop_v',fm(m.strop,0)+' руб.');
+  setText('var_pt_v',fm(m.varPT,0)+' руб./т');
+  // split
+  setText('sk_fix',fM(m.fixed)+' руб.');
+  setText('sk_fix_pt',fm(m.fixed/v.vol,0)+' руб./т');
+  setText('sk_var',fM(m.totalVar)+' руб.');
+  setText('sk_var_pt',fm(m.varPT,0)+' руб./т');
+  // kpi
+  setText('k_rev',fM(m.rev)+' руб.');
+  setText('k_rev_s',fm(v.price)+' × '+v.vol+' т');
+  setText('k_cost',fM(m.total)+' руб.');
+  setText('k_cost_s',fm(m.cpt,0)+' руб./т');
+  var ne=el('k_net');
+  if(ne){ne.textContent=fM(m.net)+' руб.';ne.className='kv '+(m.net>=0?'t':'r');}
+  setText('k_net_s',m.net>=0?'чистая прибыль':'убыток');
+  var me=el('k_marg');
+  if(me){me.textContent=fP(m.margin);me.className='kv '+(m.margin>=.15?'t':m.margin>=0?'o':'r');}
+  setText('k_cpm2',fm(m.cpt/v.m2t,0)+' руб.');
+  setText('k_cpm2_s','÷'+v.m2t+' м²/т');
+  setText('k_pm2',fm(v.price/v.m2t,0)+' руб.');
+  var bv=el('k_bep_v');
+  if(bv){bv.textContent=isFinite(m.bepV)?fm(m.bepV,0)+' т/мес':'∞';bv.className='kv '+(v.vol>=m.bepV?'t':'o');}
+  setText('k_mat_sh',m.total>0?fP(v.mat*v.vol/m.total):'—');
+  setText('k_fot',m.total>0?fP((m.strop+m.itr+v.trans+m.fotPT*v.vol)/m.total):'—');
+  var pb=el('k_pb');
+  if(pb){pb.textContent=m.net>0?fm(v.capex/m.net,1)+' мес.':'убыток';pb.className='kv '+(m.net>0?'o':'r');}
+  setText('k_cpt',fm(m.cpt,0)+' руб.');
+  setText('k_bep_p',fm(m.cpt,0)+' руб./т');
+  // chart
+  drawBar('cProfit',VOLS.map(function(x){return x+'т';}),VOLS.map(function(vl){return calc(vl,v.price,v).net;}));
+  el('breakdown').innerHTML=buildBreakdown(v,m);
+}
+
+// PERIOD
+var selP=6;
+function buildPeriod(){
+  var html='';
+  for(var i=1;i<=12;i++)html+='<button class="pbt'+(i===selP?' on':'')+'" data-p="'+i+'">'+i+' мес.</button>';
+  el('pgrid').innerHTML=html;
+  el('pgrid').querySelectorAll('.pbt').forEach(function(b){
+    b.addEventListener('click',function(){selP=+this.getAttribute('data-p');buildPeriod();});
+  });
+  var v=getV(),m=calc(v.vol,v.price,v),cum=0;
+  var rows='<table><thead><tr><th style="text-align:left">Месяц</th><th>Выручка</th><th>Затраты</th><th>Чистая прибыль</th><th>Накопл. итог</th></tr></thead><tbody>';
+  for(var i=1;i<=selP;i++){
+    var adj=i===1?v.capex:0,na=m.net-adj;cum+=na;
+    rows+='<tr'+(i===selP?' class="hl"':'')+'>'
+      +'<td>М'+i+(i===1?' <span style="color:#d97706;font-size:.6rem;font-family:Fira Code,monospace">−CAPEX</span>':'')+'</td>'
+      +'<td class="pos">'+fM(m.rev)+'</td>'
+      +'<td class="neg">'+fM(m.total)+'</td>'
+      +'<td class="'+(na>=0?'pos':'neg')+'">'+fM(na)+'</td>'
+      +'<td class="'+(cum>=0?'pos':'neg')+'">'+fM(cum)+'</td></tr>';
+  }
+  rows+='</tbody></table>';
+  el('p_table').innerHTML=rows;
+  el('p_kpi').innerHTML=
+    '<div class="kpi t"><div class="kl">Выручка за '+selP+' мес.</div><div class="kv t">'+fM(m.rev*selP)+' руб.</div></div>'+
+    '<div class="kpi '+(cum>=0?'t':'r')+'"><div class="kl">Накопл. чистая прибыль</div><div class="kv '+(cum>=0?'t':'r')+'">'+fM(cum)+' руб.</div></div>'+
+    '<div class="kpi o"><div class="kl">Окупаемость CAPEX</div><div class="kv o">'+(m.net>0?fm(v.capex/m.net,1)+' мес.':'убыток')+'</div></div>'+
+    '<div class="kpi b"><div class="kl">Чистая маржа</div><div class="kv">'+fP(m.netMargin)+'</div></div>';
+}
+
+// SCENARIOS
+function buildScenarios(){
+  var v=getV();
+  var sV=[100,150,200,300,400,500,700,1000];
+  var sP=[80000,100000,120000,140000,155000,175000,200000,250000];
+  var h='<table><thead><tr><th>Цена↓ / Объём→</th>';
+  sV.forEach(function(sv){h+='<th>'+sv+' т</th>';});
+  h+='</tr></thead><tbody>';
+  sP.forEach(function(sp){
+    var cur=Math.abs(sp-v.price)<5001;
+    h+='<tr'+(cur?' class="hl"':'')+'><td style="font-family:Fira Code,monospace;font-weight:600">'+fm(sp/1000,0)+' тыс/т</td>';
+    sV.forEach(function(sv){
+      var r=calc(sv,sp,v),curV=sv===v.vol,cls=r.net>=0?'pos':'neg';
+      h+='<td style="'+(curV&&cur?'background:#dbeafe;outline:2px solid #1d4ed8;':curV?'background:#d1fae5;':'')+'">'+
+        '<span class="'+cls+'">'+fM(r.net)+'</span>'+
+        '<div style="font-size:.58rem;color:#6b7280;font-family:Fira Code,monospace">'+fP(r.netMargin)+'</div></td>';
+    });
+    h+='</tr>';
+  });
+  h+='</tbody></table><div style="font-size:.6rem;color:#6b7280;margin-top:8px;font-family:Fira Code,monospace;">Чистая прибыль/мес. Синяя рамка = текущее положение слайдеров.</div>';
+  el('scen_m').innerHTML=h;
+  var bh='<table><thead><tr><th>Объём</th><th>Пост./мес</th><th>Перем./т</th><th>Себестоим./т</th><th>Мин. цена/т</th><th>Мин. цена/м²</th><th>Чистая маржа</th></tr></thead><tbody>';
+  sV.forEach(function(sv){
+    var r=calc(sv,v.price,v);
+    bh+='<tr'+(sv===v.vol?' class="hl"':'')+'>'
+      +'<td style="font-weight:700">'+sv+' т</td>'
+      +'<td style="color:#1d4ed8">'+fM(r.fixed)+'</td>'
+      +'<td style="color:#d97706">'+fm(r.varPT,0)+'</td>'
+      +'<td>'+fm(r.cpt,0)+'</td>'
+      +'<td style="color:#dc2626;font-weight:700">'+fm(r.cpt,0)+'</td>'
+      +'<td style="color:#dc2626;font-weight:700">'+fm(r.cpt/v.m2t,0)+'</td>'
+      +'<td><span class="'+(r.netMargin>=0?'pos':'neg')+'">'+fP(r.netMargin)+'</span></td></tr>';
+  });
+  bh+='</tbody></table>';
+  el('bep_t').innerHTML=bh;
+}
+
+function resetAll(){
+  var d={sv:150,sp:155000,sm2t:45,sarea:1300,srentr:850,selec:543400,sto:440000,strans:347000,sstrop_cnt:3,sstrop_r:8000,smat:59265,sps:0,sml:2,sc1:1500000,sc2:700000};
+  Object.keys(d).forEach(function(id){var s=el(id);if(s)s.value=d[id];});
+  document.querySelectorAll('input[type=range]').forEach(function(sl){updateSlLabel(sl);});
+  ITR.forEach(function(p,i){p._c=p.cnt;var e=el('ic'+i);if(e)e.textContent=p.cnt;});
+  fotMode='ru';
+  el('tog_ru').className='tobt on';
+  el('tog_int').className='tobt';
+  update();
+}
+
+buildItr();
+update();
+window.addEventListener('resize',function(){
+  var v=getV(),m=calc(v.vol,v.price,v);
+  drawBar('cProfit',VOLS.map(function(x){return x+'т';}),VOLS.map(function(vl){return calc(vl,v.price,v).net;}));
+});
+})();
+</script>
+</body>
+</html>
